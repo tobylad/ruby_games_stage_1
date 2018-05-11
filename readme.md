@@ -18,7 +18,7 @@ Code name: **Stepford**
 With all logic in place, stage 2 is refactored into a project not only fun to play on the command line, but more visually appealing as well!  The total package!
 
 ## *Stage 4: Full-Stack Web Application*
-Code name: **Chief**
+Code name: **Big Chief**
 
 The games brought to life on a web page with Ruby on Rails and JavaScript, persisted with a SQL database, and deployed LIVE for the entire world to play!
 
