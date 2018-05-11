@@ -20,7 +20,7 @@ With all logic in place, stage 2 is refactored into a project not only fun to pl
 ## *Stage 4: Full-Stack Web Application*
 Code name: **Headhunter**
 
-The games brought to life on a web page with Ruby on Rails and JavaScript, and persisted with a postgreSQL database.
+The games brought to life on a web page with Ruby on Rails and JavaScript, persisted with a SQL database, and deployed LIVE for the entire world to play!
 
 Try to beat the high score!
 (Ahh, nostalgia...)
