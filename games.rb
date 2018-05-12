@@ -1,7 +1,7 @@
-# This file contains terminal 'styling' helpers and universal prompts.
+# Terminal 'styling' helpers and universal prompts.
 
 def game_selection
-  padding
+  clear_screen
   puts "What game would you like to play? (press q + enter to exit)"
   puts "1. Mad Libs"
   puts "2. Rock Paper Scissors"
@@ -61,9 +61,7 @@ end
 
 def frame 
   puts ""
-  puts ""
   puts "=============================================="
-  puts ""
   puts ""
 end
 
