@@ -1,97 +1,162 @@
-# Slices:
-  # 1. Get complete game up and running with ONE simple word.
-    # Progress: You can now win with the right guesses, and the word displays well.  However, losses are buggy.  Fix em!
-  # 2. Add longer words.
-  # 3. Add categories.
+require_relative "./helpers/hangman_string_helpers"
 
 def run_hangman
-  clear_screen
   play_hangman
 end
 
 def play_hangman
-  clear_screen
+  word_bank = {
+    'animals' => ["bear", "kitty", "red panda"],
+    'superheroes' => ["Vision", "Iron Man", "Captain America"],
+    'pop_artists' => ["Ed Sheeran", "Sia", "Bruno Mars"]
+  }
 
-  guesses_left = 5
-  word = "cat"
-  guessed_letters = []
-  correct_letters = []
-  wrong_letters = []
+  clear_screen
+  word = word_generator(word_bank)
+  guesses_left = 5; guessed_letters = []; correct_letters = []
   
+############### Start game loop ############################
   while guesses_left > 0
     padding
-    if guessed_letters.length == 0
-      puts "3-letter word.  Guess your letter here!"
-    else
-      puts "Guess another letter!"
-    end
-    
+    hangman_guess_prompt(word, guessed_letters)
     input = gets.chomp
-    
-    letter_validation(input, correct_letters)
-    valid_guess = input.downcase
+    valid_guess = letter_validation(input, guessed_letters)
   
-    if word.include?(valid_guess)
-      guessed_letters << valid_guess
-      correct_letters << valid_guess
-      checkpoint = hangman_string(word, correct_letters).split.join
+    if valid_guess == false
+      invalid_entry
+    elsif word.include?(input.downcase) || word.include?(input.upcase)
+      guessed_letters.push(input.upcase, input.downcase)
+      correct_letters.push(input.upcase, input.downcase)
       
-      return victory(word) if checkpoint == word
-      puts "Yes!"
-    elsif !word.include?(valid_guess)
-      guessed_letters << valid_guess
-      wrong_letters << valid_guess
+      if word_checker(word, correct_letters)
+        guesses_left = 0
+        victory(word)
+      else 
+        display_guesses_left(guesses_left)
+      end
+
+    else
+      guessed_letters.push(input.upcase, input.downcase)
       guesses_left -= 1
-      puts "Guesses left: #{guesses_left}"
-    end
-    padding
-    frame
-    puts hangman_string(word, correct_letters)
-    frame
-  end
-  
-  
-  #########################################
-  
-end
-
-def hangman_string(word, correct_letters)
-  # Start a string with all underscores
-  current_word_state = Array.new(word.length, "_")
-  display_word = current_word_state.join(' ')
-  
-  correct_letters.each do |letter| 
-    indices = word.chars.each_index.select { |i| word[i] == letter }
       
-    indices.each do |i|
-      current_word_state.slice!(i)
-      current_word_state.insert(i, word[i])
-      display_word = current_word_state.join(' ')
+      if guesses_left > 0
+        display_guesses_left(guesses_left)
+      else
+        defeat(word)
+      end
+
+    end
+
+    # The extra if statement is to avoid having to use hard returns on victory or defeat, allowing a player to play again.
+    if !word_checker(word, correct_letters) && guesses_left > 0
+      frame
+      hangman_character(guesses_left)
+      frame
+      puts hangman_string(word, correct_letters)
+      frame
     end
   end
-  display_word
+############### End game loop ############################
+  
+  
+  padding
+  again = play_again
+  again == true ? run_hangman : say_thanks
 end
 
-def victory(word)
-  padding
-  puts "#{word.chars.join(' ')}"
-  puts "You won!"
+# Word and letter helpers **
+def letter_count(word)
+  word.slice!(/\s/) until !word.match(/\s/)
+  word.length
+end
+
+def word_count(word)
+  word.split(" ").length
 end
 
 def letter_validation(input, guessed_letters)
-  return not_a_letter if !input.match(/[a-zA-Z]/)
-  return just_one_letter if input.chars.length > 1
-  return already_guessed if guessed_letters.include?(input.downcase)
+  return false if !input.match(/[a-zA-Z]/)
+  return false if input.chars.length > 1
+  return false if guessed_letters.include?(input)
+  true
 end
 
-def not_a_letter
-  puts "That's not a letter!"
+# Eliminates whitespace and duplicate letters
+def chars_check_format(chars)
+  chars.join.gsub(/\s/, '').chars.sort.uniq
 end
 
-def just_one_letter
-  puts "One letter at a time, cowboy!"
+def switch_case(letter)
+  if letter.upcase == letter
+    letter.downcase
+  elsif letter.downcase == letter
+    letter.upcase
+  end
 end
 
-def already_guessed
-  puts "You already guessed that letter!"
+# END word and letter helpers
+
+def word_checker(word, correct_letters)
+  # Enables case insensitivity in guesses
+  case_pairs = []
+  word.chars.each do |char| 
+    case_pairs << char && 
+    case_pairs << switch_case(char)
+  end
+
+  chars_check_format(case_pairs) == correct_letters.sort
+end
+
+# Prompt Helpers **
+def word_generator(word_bank)
+  puts "Welcome to Hangman!"
+  puts "Choose a category:"
+  sleep(0.3)
+  puts "1. Animals"
+  puts "2. MCU Superheroes"
+  puts "3. Popular music artists"
+  category_input = gets.chomp
+  
+  case category_input
+    when "1"
+      word = word_bank['animals'].sample
+    when "2"
+      word = word_bank['superheroes'].sample
+    when "3"
+      word = word_bank['pop_artists'].sample
+    else 
+      puts "That's not an option!"
+      return run_hangman
+  end
+  word
+end
+
+def hangman_guess_prompt(word, guessed_letters)
+  if guessed_letters.length == 0
+    puts "Words: #{word_count(word)}"
+    puts "Letters: #{letter_count(word)}"
+    puts "Make your first guess!"
+  else
+    puts "Guess another letter!"
+  end
+end
+
+# END prompt helpers
+
+# Draws hangman character on terminal screen
+def hangman_character(guesses_left)
+  case guesses_left
+    when 5
+      hangman_frame_1
+    when 4
+      hangman_frame_2
+    when 3
+      hangman_frame_3
+    when 2
+      hangman_frame_4
+    when 1
+      hangman_frame_5
+    when 0
+      hangman_frame_6
+  end
 end
