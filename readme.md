@@ -7,6 +7,22 @@ Code name: **Outlaw**
 
 This stage contains games built entirely from Ruby methods.  It's the Wild West out here.
 
+**Play now!**
+
+Clone to local repository with:
+```
+git clone https://github.com/tobylad/ruby_games_stage_1.git
+```
+
+Change into directory, then run:
+```ruby
+ruby runner.rb
+```
+
+Enjoy!  Feedback is *always* appreciated so please don't hesitate (and before you give it read about the whole project :) )
+
+
+
 ## *Stage 2: Class Structure/Test Coverage*
 Code name: **Keeper**
 
