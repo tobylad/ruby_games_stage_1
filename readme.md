@@ -25,11 +25,11 @@ Enjoy!  Feedback is *always* appreciated so please don't hesitate (and before yo
 
 ## *Stage 2: Class Structure/Test Coverage*
 
-This stage refactors stage 1, moving all game logic into classes, and fully backing them with RSpec tests.  Is she pretty to look at?  Not yet, but she's worth bringing home to the folks!
+This stage refactors stage 1, moving all game logic into classes, and fully backing them with RSpec tests.  So not much will change on your end as compared to Stage 1, but the backend foundation will be much stronger.
 
 ## *Stage 3: Fun with TTY*
 
-With all logic in place, stage 2 is refactored into a project not only fun to play on the command line, but more visually appealing as well!  The total package!
+With all logic in place, stage 2 is refactored into a project not only fun to play on the command line, but more visually appealing as well!  The total terminal package!
 
 ## *Stage 4: Full-Stack Web Application*
 
