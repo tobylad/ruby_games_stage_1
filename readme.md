@@ -11,9 +11,10 @@ This stage contains games built entirely from Ruby methods.  It's the Wild West 
 Clone to local repository with:
 ```
 git clone https://github.com/tobylad/ruby_games_stage_1.git
+
+cd ruby_games_stage_1
 ```
 
-Change into directory, then run:
 ```ruby
 ruby runner.rb
 ```
