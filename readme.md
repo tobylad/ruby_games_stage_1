@@ -38,5 +38,7 @@ Try to beat the high score!
 
 ## Inspiration
 
-In June of 2017, I barely knew what HTML was.  After deciding to make a major change, I fully immersed myself in programming and the world of web development.  This first anniversary project is a way to chronicle that journey - in code.
+Before June of last year, I would have called myself computer-savvy, but I had no idea how to write a lick of code.
+
+After deciding to make a major life change, I fully immersed myself in programming and the world of web development.  This first anniversary project is a way to chronicle that journey - in code.
 
