@@ -1,14 +1,4 @@
-# Fixes: Aces
-  # Assign aces to 11's automatically
-  # Write method for checking if there are aces in the hand (find?)
-  # Write another method for changing the ace from 11 to 1
-    # Keep auto busts (2 aces on deal) in mind
-
-# Refactor for clarity, DRY
-
-# Backlog:
-  # More realistic decks, or logic around it 
-    # Maybe card check (like for Aces), and if there are 4 don't draw that one?
+require_relative "./helpers/blackjack_string_helpers"
 
 def run_blackjack
   puts "Welcome to Blackjack!"
@@ -16,8 +6,6 @@ def run_blackjack
 end
 
 def play_blackjack
-  # Notes about this method: Repeating line 'player_score = calc_score...'
-  # is smelly.  But haven't figured out a workaround yet.
 
   padding
   drawn_cards = []
@@ -37,14 +25,13 @@ def play_blackjack
   padding
 
   ### Start game loop ###
-  while player_score < 21 && stand == false
+  while player_score <= 21 && stand == false
 
-    if calculate_score(drawn_cards) == 21
+    if calculate_score(drawn_cards) == 21 && drawn_cards.length == 2
       player_score = calculate_score(drawn_cards)
+      puts "Your current score is #{player_score}."
+      stand = true
       win
-    elsif calculate_score(drawn_cards) > 21
-      player_score = calculate_score(drawn_cards)
-      bust
     else
       frame
       current_cards(drawn_cards)
@@ -57,11 +44,18 @@ def play_blackjack
         when "hit"
           drawn_cards << draw_card
           player_score = calculate_score(drawn_cards)
+          puts "Your current score is #{player_score}."
           bust if player_score > 21
-          win if player_score == 21
+          
+          if player_score == 21
+            stand = true
+            win
+          end
+
         when "stand"
           stand = true
           player_score = calculate_score(drawn_cards)
+          "Your current score is #{player_score}."
           padding
         else
           "That doesn't make sense!"
@@ -101,7 +95,7 @@ def draw_card
     "Jack" => 10,
     "Queen" => 10,
     "King" => 10,
-    "Ace" => 1
+    "Ace" => 11
   }
   random_card = cards.sample
   score_conversion.select { |card, value| card == random_card }
@@ -110,47 +104,55 @@ end
 def calculate_score(drawn_cards)
   raw_scores = []
 
+  # Assigns score based on card values
   drawn_cards.each do |pair|
     raw_scores << pair.values.first
   end
-  raw_scores.reduce(:+)
+
+  # If player would bust but has an Ace in their hand, 
+  # this conditional will change all Ace values from 11 to 1
+  if raw_scores.reduce(:+) > 21 && raw_scores.include?(11)
+    ace_indices = 
+    raw_scores.each_index.select do |i|
+      raw_scores[i] == 11
+    end
+
+    ace_indices.each do |i| 
+      raw_scores.slice!(i)
+      raw_scores << 1
+    end
+
+    raw_scores.reduce(:+)
+
+  else
+    raw_scores.reduce(:+)
+  end
 end
 
 def hit_or_stand
   # Output: string
   puts "You're still under 21. Hit or stand?"
   input = gets.chomp
-  input
 end
 
 # Dealer helper methods **
 def dealer_round
-  possible_outcomes = [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+  possible_outcomes = [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
   possible_outcomes.sample
 end
 
 def dealer_result(player_score, dealer_score)
   if dealer_score == 21
+    both_scores(player_score, dealer_score)
+    dealer_blackjack_win
+  elsif dealer_score < 21 && dealer_score > player_score
+    both_scores(player_score, dealer_score)
     dealer_win
+  elsif dealer_score < 21 && dealer_score <= player_score
+    both_scores(player_score, dealer_score)
+    win
   elsif dealer_score > 21
+    both_scores(player_score, dealer_score)
     dealer_bust
   end
-end
-
-
-# String helpers **
-def win
-  puts "Blackjack! You win!"
-end
-
-def bust
-  puts "Bust! You lose!"
-end
-
-def dealer_win
-  puts "Dealer gets a blackjack - you lose!"
-end
-
-def dealer_bust
-  puts "Dealer busts! You win!"
 end
