@@ -38,6 +38,8 @@ Full-Stack Web Application.  Play the same games you could in the command line v
 
 Built with Ruby on Rails and JavaScript.
 
+Github link: https://github.com/tobylad/ruby-games
+
 ## Inspiration
 
 In June of last year, I would have called myself computer-savvy, but I'd have thought FizzBuzz was a drink.
