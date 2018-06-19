@@ -4,13 +4,8 @@ The aim of the Ruby Games Project is to take a Ruby project through different st
 
 ## *Stage 1: Command line*
 
-Play games from the command line!  Current games are:
--Mad Libs  
--Rock Paper Scissors  
--I Spy
--Hangman
--Tic Tac Toe
--Blackjack
+Play games from the command line!  
+Current games are: Mad Libs, Rock Paper Scissors, I Spy, Hangman, Tic Tac Toe, Blackjack
 
 **Play now!**
 
